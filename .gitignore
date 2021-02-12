@@ -1,7 +1,3 @@
-<<<<<<< 2c9dd9e545b1684c8220f6311493e69f228b3a65
-=======
-
->>>>>>> upload
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -18,20 +14,13 @@ dist/
 downloads/
 eggs/
 .eggs/
-<<<<<<< 2c9dd9e545b1684c8220f6311493e69f228b3a65
-lib/
-=======
->>>>>>> upload
 lib64/
 parts/
 sdist/
 var/
 wheels/
-<<<<<<< 2c9dd9e545b1684c8220f6311493e69f228b3a65
 pip-wheel-metadata/
 share/python-wheels/
-=======
->>>>>>> upload
 *.egg-info/
 .installed.cfg
 *.egg
@@ -50,20 +39,14 @@ pip-delete-this-directory.txt
 # Unit test / coverage reports
 htmlcov/
 .tox/
-<<<<<<< 2c9dd9e545b1684c8220f6311493e69f228b3a65
 .nox/
-=======
->>>>>>> upload
 .coverage
 .coverage.*
 .cache
 nosetests.xml
 coverage.xml
 *.cover
-<<<<<<< 2c9dd9e545b1684c8220f6311493e69f228b3a65
 *.py,cover
-=======
->>>>>>> upload
 .hypothesis/
 .pytest_cache/
 
@@ -75,10 +58,7 @@ coverage.xml
 *.log
 local_settings.py
 db.sqlite3
-<<<<<<< 2c9dd9e545b1684c8220f6311493e69f228b3a65
 db.sqlite3-journal
-=======
->>>>>>> upload
 
 # Flask stuff:
 instance/
@@ -96,7 +76,6 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-<<<<<<< 2c9dd9e545b1684c8220f6311493e69f228b3a65
 # IPython
 profile_default/
 ipython_config.py
@@ -117,13 +96,6 @@ __pypackages__/
 # Celery stuff
 celerybeat-schedule
 celerybeat.pid
-=======
-# pyenv
-.python-version
-
-# celery beat schedule file
-celerybeat-schedule
->>>>>>> upload
 
 # SageMath parsed files
 *.sage.py
@@ -149,16 +121,13 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-<<<<<<< 2c9dd9e545b1684c8220f6311493e69f228b3a65
 .dmypy.json
 dmypy.json
 
 # Pyre type checker
 .pyre/
-=======
 
 
 ## Coin: 
 res/
 *pth
->>>>>>> upload
