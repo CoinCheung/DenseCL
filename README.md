@@ -118,7 +118,7 @@ Our pre-trained ResNet-50 models can be downloaded as following:
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
 <td align="center"> -- </td>
-<td align="center"><a href="https://dl.fbaipublicfiles.com/moco/moco_checkpoints/moco_v2_800ep/moco_v2_800ep_pretrain.pth.tar">download</a></td>
+<td align="center"><a href="https://github.com/CoinCheung/denseCL/releases/download/v0.0.1/checkpoint_0199.pth.tar">download</a></td>
 <td align="center"><tt>a04e12f8</tt></td>
 </tr>
 </tbody></table>
