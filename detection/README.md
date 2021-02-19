@@ -1,5 +1,5 @@
 
-## MoCo: Transferring to Detection
+## DenseCL: Transferring to Detection
 
 The `train_net.py` script reproduces the object detection experiments on Pascal VOC and COCO.
 
@@ -55,6 +55,11 @@ Below are the results on Pascal VOC 2007 test, fine-tuned on 2007+2012 trainval 
 <td align="center">82.5</td>
 <td align="center">57.4</td>
 <td align="center">64.0</td>
+</tr>
+<tr><td align="left">ImageNet-1M, DenseCL, 200ep</td>
+<td align="center">82.7</td>
+<td align="center">58.5</td>
+<td align="center">65.6</td>
 </tr>
 </tbody></table>
 

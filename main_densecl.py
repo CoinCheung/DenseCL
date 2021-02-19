@@ -160,7 +160,6 @@ def main_worker(gpu, ngpus_per_node, args):
     # create model
     print("=> creating model '{}'".format(args.arch))
     model = moco.builder.MoCo(
-        models.__dict__[args.arch],
         args.moco_dim, args.moco_k, args.moco_m, args.moco_t, args.mlp)
     print(model)
 

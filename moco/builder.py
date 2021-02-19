@@ -10,7 +10,7 @@ class MoCo(nn.Module):
     Build a MoCo model with: a query encoder, a key encoder, and a queue
     https://arxiv.org/abs/1911.05722
     """
-    def __init__(self, base_encoder, dim=128, K=65536, m=0.999, T=0.07, mlp=False):
+    def __init__(self, dim=128, K=65536, m=0.999, T=0.07, mlp=False):
         """
         dim: feature dimension (default: 128)
         K: queue size; number of negative keys (default: 65536)
@@ -103,7 +103,7 @@ class MoCo(nn.Module):
         return x_gather[idx_this], idx_unshuffle
 
     @torch.no_grad()
-    def _batch_unshuffle_ddp(self, x, idx_unshuffle):
+    def _batch_unshuffle_ddp(self, x, feat_k, dense_k_norm, idx_unshuffle):
         """
         Undo batch shuffle.
         *** Only support DistributedDataParallel (DDP) model. ***
@@ -111,6 +111,8 @@ class MoCo(nn.Module):
         # gather from all gpus
         batch_size_this = x.shape[0]
         x_gather = concat_all_gather(x)
+        feat_k_gather = concat_all_gather(feat_k)
+        dense_k_norm_gather = concat_all_gather(dense_k_norm)
         batch_size_all = x_gather.shape[0]
 
         num_gpus = batch_size_all // batch_size_this
@@ -119,7 +121,7 @@ class MoCo(nn.Module):
         gpu_idx = torch.distributed.get_rank()
         idx_this = idx_unshuffle.view(num_gpus, -1)[gpu_idx]
 
-        return x_gather[idx_this]
+        return x_gather[idx_this], feat_k_gather[idx_this], dense_k_norm_gather[idx_this]
 
     def forward(self, im_q, im_k):
         """
@@ -151,7 +153,8 @@ class MoCo(nn.Module):
             dense_k_norm = nn.functional.normalize(dense_k, dim=1)
 
             # undo shuffle
-            k = self._batch_unshuffle_ddp(k, idx_unshuffle)
+            k, feat_k, dense_k_norm = self._batch_unshuffle_ddp(
+                    k, feat_k, dense_k_norm, idx_unshuffle)
 
             ## match
             feat_q_norm = nn.functional.normalize(feat_q, dim=1)

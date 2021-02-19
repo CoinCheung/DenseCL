@@ -5,7 +5,7 @@
   <img src="https://user-images.githubusercontent.com/11435359/71603927-0ca98d00-2b14-11ea-9fd8-10d984a2de45.png" width="300">
 </p>
 
-This is an unofficial PyTorch implementation of the [DenseCL paper](https://arxiv.org/abs/2011.09157):
+This is an unofficial PyTorch implementation of the [DenseCL paper](https://arxiv.org/abs/2011.09157), with the help and suggestions from @WXinlong and @DerrickWang005.
 
 
 ### Preparation
@@ -22,6 +22,8 @@ diff main_lincls.py <(curl https://raw.githubusercontent.com/pytorch/examples/ma
 ### Unsupervised Training
 
 This implementation only supports **multi-gpu**, **DistributedDataParallel** training, which is faster and simpler; single-gpu or DataParallel training is not supported.
+
+This implementation only supports **resnet-50**, since we need to modify model architecture and I only modified resnet-50.
 
 To do unsupervised pre-training of a ResNet-50 model on ImageNet in an 8-gpu machine, run:
 ```
@@ -54,16 +56,18 @@ Linear classification results on ImageNet using this repo with 8 NVIDIA V100 GPU
 <th valign="bottom">pre-train<br/>time</th>
 <th valign="bottom">MoCo v1<br/>top-1 acc.</th>
 <th valign="bottom">MoCo v2<br/>top-1 acc.</th>
+<th valign="bottom">DenseCL<br/>top-1 acc.</th>
 <!-- TABLE BODY -->
 <tr><td align="left">ResNet-50</td>
 <td align="center">200</td>
 <td align="center">53 hours</td>
 <td align="center">60.8&plusmn;0.2</td>
 <td align="center">67.5&plusmn;0.1</td>
+<td align="center"> -- &plusmn;0.1</td>
 </tr>
 </tbody></table>
 
-Here we run 5 trials (of pre-training and linear classification) and report mean&plusmn;std: the 5 results of MoCo v1 are {60.6, 60.6, 60.7, 60.9, 61.1}, and of MoCo v2 are {67.7, 67.6, 67.4, 67.6, 67.3}.
+Here we run 5 trials (of pre-training and linear classification) and report mean&plusmn;std: the 5 results of MoCo v1 are {60.6, 60.6, 60.7, 60.9, 61.1}, of MoCo v2 are {67.7, 67.6, 67.4, 67.6, 67.3}, and of DenseCL are (...).
 
 
 ### Models
@@ -105,6 +109,15 @@ Our pre-trained ResNet-50 models can be downloaded as following:
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
 <td align="center">71.1</td>
+<td align="center"><a href="https://dl.fbaipublicfiles.com/moco/moco_checkpoints/moco_v2_800ep/moco_v2_800ep_pretrain.pth.tar">download</a></td>
+<td align="center"><tt>a04e12f8</tt></td>
+</tr>
+<tr><td align="left"><a href="https://arxiv.org/abs/2011.09157">DenseCL</a></td>
+<td align="center">200</td>
+<td align="center">&#x2713</td>
+<td align="center">&#x2713</td>
+<td align="center">&#x2713</td>
+<td align="center"> -- </td>
 <td align="center"><a href="https://dl.fbaipublicfiles.com/moco/moco_checkpoints/moco_v2_800ep/moco_v2_800ep_pretrain.pth.tar">download</a></td>
 <td align="center"><tt>a04e12f8</tt></td>
 </tr>
