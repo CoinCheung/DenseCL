@@ -7,7 +7,7 @@ The `train_net.py` script reproduces the object detection experiments on Pascal 
 
 1. Install [detectron2](https://github.com/facebookresearch/detectron2/blob/master/INSTALL.md).
 
-1. Convert a pre-trained MoCo model to detectron2's format:
+1. Convert a pre-trained MoCo/DenseCL model to detectron2's format:
    ```
    python3 convert-pretrain-to-detectron2.py input.pth.tar output.pkl
    ```
