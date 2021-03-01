@@ -63,11 +63,13 @@ Linear classification results on ImageNet using this repo with 8 NVIDIA V100 GPU
 <td align="center">53 hours</td>
 <td align="center">60.8&plusmn;0.2</td>
 <td align="center">67.5&plusmn;0.1</td>
-<td align="center"> -- &plusmn;0.1</td>
+<td align="center"> 63.8 &plusmn;0.1</td>
 </tr>
 </tbody></table>
 
 Here we run 5 trials (of pre-training and linear classification) and report mean&plusmn;std: the 5 results of MoCo v1 are {60.6, 60.6, 60.7, 60.9, 61.1}, of MoCo v2 are {67.7, 67.6, 67.4, 67.6, 67.3}, and of DenseCL are (...).
+
+Please be aware that though denseCL cannot match mocov2 in the filed of classification, it is superior to mocov2 in terms of object detection. See [./detection](detection) for details.
 
 
 ### Models
@@ -117,7 +119,7 @@ Our pre-trained ResNet-50 models can be downloaded as following:
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
-<td align="center"> -- </td>
+<td align="center"> 63.8 </td>
 <td align="center"><a href="https://github.com/CoinCheung/denseCL/releases/download/v0.0.1/checkpoint_0199.pth.tar">download</a></td>
 <td align="center"><tt>7cfc894c</tt></td>
 </tr>
