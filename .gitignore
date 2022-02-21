@@ -135,4 +135,5 @@ dist_train_1.sh
 dist_train_2.sh
 *tar
 detection/output/
+*pkl
 
