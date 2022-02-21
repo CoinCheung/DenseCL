@@ -30,13 +30,17 @@ This requires cuda10.2 to work.
 
 4. Run training:
    ```
+   # r50 densecl
    python train_net.py --config-file configs/pascal_voc_R_50_C4_24k_moco.yaml \
+	--num-gpus 8 MODEL.WEIGHTS ./output.pkl
+   # r101 densecl
+   python train_net.py --config-file configs/pascal_voc_R_101_C4_24k_moco.yaml \
 	--num-gpus 8 MODEL.WEIGHTS ./output.pkl
    ```
 
 ### Results
 
-Below are the results on Pascal VOC 2007 test, fine-tuned on 2007+2012 trainval for 24k iterations using Faster R-CNN with a R50-C4 backbone:
+Below are the results on Pascal VOC 2007 test, fine-tuned on 2007+2012 trainval for 24k iterations using Faster R-CNN with a R50/R101-C4 backbone:
 
 <table><tbody>
 <!-- START TABLE -->
