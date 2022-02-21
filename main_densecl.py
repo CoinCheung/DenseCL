@@ -30,6 +30,10 @@ model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
     and callable(models.__dict__[name]))
 
+from resnet import resnet50, resnet101
+model_names = ['resnet50', 'resnet101']
+model_dict = {'resnet50': resnet50, 'resnet101': resnet101}
+
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
 parser.add_argument('data', metavar='DIR',
                     help='path to dataset')
@@ -159,7 +163,8 @@ def main_worker(gpu, ngpus_per_node, args):
                                 world_size=args.world_size, rank=args.rank)
     # create model
     print("=> creating model '{}'".format(args.arch))
-    model = moco.builder.MoCo(
+    base_model = model_dict[args.arch]
+    model = moco.builder.MoCo(base_model,
         args.moco_dim, args.moco_k, args.moco_m, args.moco_t, args.mlp)
     print(model)
 
