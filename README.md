@@ -19,33 +19,21 @@ diff main_lincls.py <(curl https://raw.githubusercontent.com/pytorch/examples/ma
 ```
 
 
-### Unsupervised Training
+### Unsupervised Training & Linear Classification
 
 This implementation only supports **multi-gpu**, **DistributedDataParallel** training, which is faster and simpler; single-gpu or DataParallel training is not supported.
 
-This implementation only supports **resnet-50**, since we need to modify model architecture and I only modified resnet-50.
+This implementation only supports **resnet-50** and **resnet-101**, since we need to modify model architecture and I only modified resnet-50.
 
-To do unsupervised pre-training of a ResNet-50 model on ImageNet in an 8-gpu machine, run:
+To do unsupervised pre-training and linear-evaluation of a ResNet50/ResNet101 model on ImageNet in an 8-gpu machine, run:
 ```
-sh dist_train.sh [your imagenet-folder with train and val folders]
+sh dist_train.sh [your imagenet-folder with train and val folders] resnet50/resnet101
 ```
 Since the paper says they use default mocov2 hyper-parameters, the above script uses same hyper-parameters as mocov2.
 
 ***Note***: for 4-gpu training, we recommend following the [linear lr scaling recipe](https://arxiv.org/abs/1706.02677): `--lr 0.015 --batch-size 128` with 4 gpus. We got similar results using this setting.
 
 
-### Linear Classification
-
-With a pre-trained model, to train a supervised linear classifier on frozen features/weights in an 8-gpu machine, run:
-```
-python main_lincls.py \
-  -a resnet50 \
-  --lr 30.0 \
-  --batch-size 256 \
-  --pretrained [your checkpoint path]/checkpoint_0199.pth.tar \
-  --dist-url 'tcp://localhost:10001' --multiprocessing-distributed --world-size 1 --rank 0 \
-  [your imagenet-folder with train and val folders]
-```
 
 Linear classification results on ImageNet using this repo with 8 NVIDIA V100 GPUs :
 <table><tbody>
@@ -65,16 +53,23 @@ Linear classification results on ImageNet using this repo with 8 NVIDIA V100 GPU
 <td align="center">67.5&plusmn;0.1</td>
 <td align="center"> 63.8 &plusmn;0.1</td>
 </tr>
+<tr><td align="left">ResNet-101</td>
+<td align="center">200</td>
+<td align="center">--</td>
+<td align="center">--</td>
+<td align="center">--</td>
+<td align="center"> 65.4 &plusmn;0.1</td>
+</tr>
 </tbody></table>
 
 Here we run 5 trials (of pre-training and linear classification) and report mean&plusmn;std: the 5 results of MoCo v1 are {60.6, 60.6, 60.7, 60.9, 61.1}, of MoCo v2 are {67.7, 67.6, 67.4, 67.6, 67.3}, and of DenseCL are (...).
 
-Please be aware that though denseCL cannot match mocov2 in the filed of classification, it is superior to mocov2 in terms of object detection. See [./detection](detection) for details.
+Please be aware that though DenseCL cannot match mocov2 in the filed of classification, it is superior to mocov2 in terms of object detection. See [./detection](detection) for details.
 
 
 ### Models
 
-Our pre-trained ResNet-50 models can be downloaded as following:
+Our pre-trained denseCL models can be downloaded as following:
 <table><tbody>
 <!-- START TABLE -->
 <!-- TABLE HEADER -->
@@ -87,41 +82,23 @@ Our pre-trained ResNet-50 models can be downloaded as following:
 <th valign="bottom">model</th>
 <th valign="bottom">md5</th>
 <!-- TABLE BODY -->
-<tr><td align="left"><a href="https://arxiv.org/abs/1911.05722">MoCo v1</a></td>
-<td align="center">200</td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center">60.6</td>
-<td align="center"><a href="https://dl.fbaipublicfiles.com/moco/moco_checkpoints/moco_v1_200ep/moco_v1_200ep_pretrain.pth.tar">download</a></td>
-<td align="center"><tt>b251726a</tt></td>
-</tr>
-<tr><td align="left"><a href="https://arxiv.org/abs/2003.04297">MoCo v2</a></td>
-<td align="center">200</td>
-<td align="center">&#x2713</td>
-<td align="center">&#x2713</td>
-<td align="center">&#x2713</td>
-<td align="center">67.7</td>
-<td align="center"><a href="https://dl.fbaipublicfiles.com/moco/moco_checkpoints/moco_v2_200ep/moco_v2_200ep_pretrain.pth.tar">download</a></td>
-<td align="center"><tt>59fd9945</tt></td>
-</tr>
-<tr><td align="left"><a href="https://arxiv.org/abs/2003.04297">MoCo v2</a></td>
-<td align="center">800</td>
-<td align="center">&#x2713</td>
-<td align="center">&#x2713</td>
-<td align="center">&#x2713</td>
-<td align="center">71.1</td>
-<td align="center"><a href="https://dl.fbaipublicfiles.com/moco/moco_checkpoints/moco_v2_800ep/moco_v2_800ep_pretrain.pth.tar">download</a></td>
-<td align="center"><tt>a04e12f8</tt></td>
-</tr>
-<tr><td align="left"><a href="https://arxiv.org/abs/2011.09157">DenseCL</a></td>
+<tr><td align="left"><a href="https://arxiv.org/abs/2011.09157">ResNet-50</a></td>
 <td align="center">200</td>
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
 <td align="center"> 63.8 </td>
-<td align="center"><a href="https://github.com/CoinCheung/denseCL/releases/download/v0.0.1/checkpoint_0199.pth.tar">download</a></td>
+<td align="center"><a href="https://github.com/CoinCheung/denseCL/releases/download/v0.0.1/r50_checkpoint_0199.pth.tar">download</a></td>
 <td align="center"><tt>7cfc894c</tt></td>
+</tr>
+<tr><td align="left"><a href="https://arxiv.org/abs/2011.09157">ResNet-101</a></td>
+<td align="center">200</td>
+<td align="center">&#x2713</td>
+<td align="center">&#x2713</td>
+<td align="center">&#x2713</td>
+<td align="center"></td>
+<td align="center"><a href="https://github.com/CoinCheung/denseCL/releases/download/v0.0.1/r101_checkpoint_0199.pth.tar">download</a></td>
+<td align="center"><tt>006675e5</tt></td>
 </tr>
 </tbody></table>
 

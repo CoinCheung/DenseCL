@@ -6,17 +6,29 @@ The `train_net.py` script reproduces the object detection experiments on Pascal 
 ### Instruction
 
 1. Install [detectron2](https://github.com/facebookresearch/detectron2/blob/master/INSTALL.md).
+```
+    $ git clone https://github.com/facebookresearch/detectron2.git
+    $ cd detectron2
+    $ git checkout 3e71a2711bec
+    $ python -m pip install -e .
+```
+This requires cuda10.2 to work.
 
-1. Convert a pre-trained MoCo/DenseCL model to detectron2's format:
+2. Convert a pre-trained MoCo/DenseCL model to detectron2's format:
    ```
    python3 convert-pretrain-to-detectron2.py input.pth.tar output.pkl
    ```
 
-1. Put dataset under "./datasets" directory,
+3. Put dataset under "./datasets" directory,
    following the [directory structure](https://github.com/facebookresearch/detectron2/tree/master/datasets)
 	 requried by detectron2.
+     ```
+        $ mkdir -p datasets && cd datasets
+        $ ln -s VOC2007 .
+        $ ln -s VOC2012 .
+     ```
 
-1. Run training:
+4. Run training:
    ```
    python train_net.py --config-file configs/pascal_voc_R_50_C4_24k_moco.yaml \
 	--num-gpus 8 MODEL.WEIGHTS ./output.pkl
@@ -62,5 +74,13 @@ Below are the results on Pascal VOC 2007 test, fine-tuned on 2007+2012 trainval 
 <td align="center">65.6</td>
 </tr>
 </tbody></table>
+
+r50:
+82.64/58.32/64.60
+82.64/58.41/64.89
+
+r101:
+83.57/61.02/68.20
+83.52/60.89/67.32
 
 ***Note:*** These results are means of 5 trials. Variation on Pascal VOC is large: the std of AP50, AP, AP75 is expected to be 0.2, 0.2, 0.4 in most cases. We recommend to run 5 trials and compute means.
