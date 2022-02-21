@@ -27,7 +27,7 @@ This implementation only supports **resnet-50** and **resnet-101**, since we nee
 
 To do unsupervised pre-training and linear-evaluation of a ResNet50/ResNet101 model on ImageNet in an 8-gpu machine, run:
 ```
-sh dist_train.sh [your imagenet-folder with train and val folders] resnet50/resnet101
+sh dist_train.sh [your imagenet-folder with train and val folders] [resnet50 or resnet101]
 ```
 Since the paper says they use default mocov2 hyper-parameters, the above script uses same hyper-parameters as mocov2.
 
@@ -96,7 +96,7 @@ Our pre-trained denseCL models can be downloaded as following:
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
-<td align="center"></td>
+<td align="center">65.4</td>
 <td align="center"><a href="https://github.com/CoinCheung/denseCL/releases/download/v0.0.1/r101_checkpoint_0199.pth.tar">download</a></td>
 <td align="center"><tt>006675e5</tt></td>
 </tr>

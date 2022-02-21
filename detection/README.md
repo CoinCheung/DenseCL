@@ -46,41 +46,46 @@ Below are the results on Pascal VOC 2007 test, fine-tuned on 2007+2012 trainval 
 <th valign="bottom">AP</th>
 <th valign="bottom">AP75</th>
 <!-- TABLE BODY -->
-<tr><td align="left">ImageNet-1M, supervised</td>
+<tr><td align="left">ImageNet-1M, R50, supervised</td>
 <td align="center">81.3</td>
 <td align="center">53.5</td>
 <td align="center">58.8</td>
 </tr>
-<tr><td align="left">ImageNet-1M, MoCo v1, 200ep</td>
+<tr><td align="left">ImageNet-1M, R50, MoCo v1, 200ep</td>
 <td align="center">81.5</td>
 <td align="center">55.9</td>
 <td align="center">62.6</td>
 </tr>
 </tr>
-<tr><td align="left">ImageNet-1M, MoCo v2, 200ep</td>
+<tr><td align="left">ImageNet-1M, R50, MoCo v2, 200ep</td>
 <td align="center">82.4</td>
 <td align="center">57.0</td>
 <td align="center">63.6</td>
 </tr>
 </tr>
-<tr><td align="left">ImageNet-1M, MoCo v2, 800ep</td>
+<tr><td align="left">ImageNet-1M, R50, MoCo v2, 800ep</td>
 <td align="center">82.5</td>
 <td align="center">57.4</td>
 <td align="center">64.0</td>
 </tr>
-<tr><td align="left">ImageNet-1M, DenseCL, 200ep</td>
+<tr><td align="left">ImageNet-1M, R50, DenseCL, 200ep</td>
 <td align="center">82.7</td>
 <td align="center">58.5</td>
 <td align="center">65.6</td>
 </tr>
+<tr><td align="left">ImageNet-1M, R101, DenseCL, 200ep</td>
+<td align="center">83.57</td>
+<td align="center">61.02</td>
+<td align="center">68.20</td>
+</tr>
 </tbody></table>
 
-r50:
-82.64/58.32/64.60
+r50:  
+82.64/58.32/64.60  
 82.64/58.41/64.89
 
-r101:
-83.57/61.02/68.20
+r101:  
+83.57/61.02/68.20  
 83.52/60.89/67.32
 
 ***Note:*** These results are means of 5 trials. Variation on Pascal VOC is large: the std of AP50, AP, AP75 is expected to be 0.2, 0.2, 0.4 in most cases. We recommend to run 5 trials and compute means.
