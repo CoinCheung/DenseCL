@@ -169,27 +169,33 @@ class MoCo(nn.Module):
         # negative logits: NxK
         l_neg = torch.einsum('nc,ck->nk', [q, self.queue.clone().detach()])
 
-        # logits: Nx(1+K)
-        logits = torch.cat([l_pos, l_neg], dim=1)
+        l_pos, l_neg = l_pos / self.T, l_neg / self.T
 
-        # apply temperature
-        logits /= self.T
-
-        # labels: positive key indicators
-        labels = torch.zeros(logits.shape[0], dtype=torch.long).cuda()
+        #  # logits: Nx(1+K)
+        #  logits = torch.cat([l_pos, l_neg], dim=1)
+        #
+        #  # apply temperature
+        #  logits /= self.T
+        #
+        #  # labels: positive key indicators
+        #  labels = torch.zeros(logits.shape[0], dtype=torch.long).cuda()
 
 
         ## densecl logits
         d_pos = torch.einsum('ncm,ncm->nm', dense_q, dense_k_norm).unsqueeze(1)
         d_neg = torch.einsum('ncm,ck->nkm', dense_q, self.queue_dense.clone().detach())
-        logits_dense = torch.cat([d_pos, d_neg], dim=1)
-        logits_dense = logits_dense / self.T
-        labels_dense = torch.zeros((n, h*w), dtype=torch.long).cuda()
+
+        d_pos, d_neg = d_pos / self.T, d_neg / self.T
+
+        #  logits_dense = torch.cat([d_pos, d_neg], dim=1)
+        #  logits_dense = logits_dense / self.T
+        #  labels_dense = torch.zeros((n, h*w), dtype=torch.long).cuda()
 
         # dequeue and enqueue
         self._dequeue_and_enqueue(k, dense_k)
 
-        return logits, labels, logits_dense, labels_dense
+        return [l_pos, l_neg], [d_pos, d_neg]
+        #  return logits, labels, logits_dense, labels_dense
 
 
 # utils
