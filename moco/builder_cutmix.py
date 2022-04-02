@@ -1,10 +1,11 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 import torch
 import torch.nn as nn
+from .cutmix import CutMixer
 
 
 
-class DenseCL(nn.Module):
+class DenseCLCutmix(nn.Module):
     """
     Build a MoCo model with: a query encoder, a key encoder, and a queue
     https://arxiv.org/abs/1911.05722
@@ -16,7 +17,9 @@ class DenseCL(nn.Module):
         m: moco momentum of updating key encoder (default: 0.999)
         T: softmax temperature (default: 0.07)
         """
-        super(DenseCL, self).__init__()
+        super(DenseCLCutmix, self).__init__()
+
+        self.cutmixer = CutMixer(T=T)
 
         self.K = K
         self.m = m
@@ -171,37 +174,21 @@ class DenseCL(nn.Module):
 
         l_pos, l_neg = l_pos / self.T, l_neg / self.T
 
-        #  # logits: Nx(1+K)
-        #  logits = torch.cat([l_pos, l_neg], dim=1)
-        #
-        #  # apply temperature
-        #  logits /= self.T
-        #
-        #  # labels: positive key indicators
-        #  labels = torch.zeros(logits.shape[0], dtype=torch.long).cuda()
-
-
         ## densecl logits
         d_pos = torch.einsum('ncm,ncm->nm', dense_q, dense_k_norm).unsqueeze(1)
         d_neg = torch.einsum('ncm,ck->nkm', dense_q, self.queue_dense.clone().detach())
 
         d_pos, d_neg = d_pos / self.T, d_neg / self.T
 
-        #  logits_dense = torch.cat([d_pos, d_neg], dim=1)
-        #  logits_dense = logits_dense / self.T
-        #  labels_dense = torch.zeros((n, h*w), dtype=torch.long).cuda()
+        ## regionCL logits
+        mix_res = self.cutmixer.mix_img(im_q)
+        loss_cutmix = self.cutmixer.forward_mix(self.encoder_q, mix_res, q, k, self.queue.detach())
 
         # dequeue and enqueue
         self._dequeue_and_enqueue(k, dense_k)
 
-        return [l_pos, l_neg], [d_pos, d_neg], [q, k]
+        return [l_pos, l_neg], [d_pos, d_neg], loss_cutmix
         #  return logits, labels, logits_dense, labels_dense
-
-
-    def forward_cuxmit(self, mix_res, q, k):
-        ims_mix, perm, h, w, hst, wst = mix_res
-        perm_unshuf = perm.argsort()
-        feat = self.encoder_q.forward(im_q)  # queries: NxC
 
 
 # utils

@@ -24,7 +24,8 @@ import torchvision.datasets as datasets
 import torchvision.models as models
 
 import moco.loader
-import moco.builder
+from moco.builder import DenseCL
+from moco.builder_cutmix import DenseCLCutmix
 from cross_entropy import CrossEntropyLoss
 from rince import RINCE
 
@@ -108,6 +109,10 @@ parser.add_argument('--aug-plus', action='store_true',
 parser.add_argument('--cos', action='store_true',
                     help='use cosine lr schedule')
 
+# options for regionCL
+parser.add_argument('--cutmix', action='store_true',
+                    help='use regionCL')
+
 
 def main():
     args = parser.parse_args()
@@ -168,7 +173,9 @@ def main_worker(gpu, ngpus_per_node, args):
     # create model
     print("=> creating model '{}'".format(args.arch))
     base_model = model_dict[args.arch]
-    model = moco.builder.MoCo(base_model,
+    Wrapper = moco.builder.DenseCL
+    if args.cutmix: Wrapper = moco.builder_cutmix.DenseCLCutmix
+    model = Wrapper(base_model,
         args.moco_dim, args.moco_k, args.moco_m, args.moco_t, args.mlp)
     print(model)
 
@@ -320,11 +327,13 @@ def train(train_loader, model, criterion, criterion_dense, optimizer, epoch, arg
         # compute output
         with amp.autocast(enabled=args.use_mixed_precision):
             #  output, target, output_dense, target_dense = model(
-            [l_pos, l_neg], [d_pos, d_neg] = model(
+            [l_pos, l_neg], [d_pos, d_neg], loss_cutmix = model(
                     im_q=images[0], im_k=images[1])
             loss = criterion(l_pos, l_neg)
             loss_dense = criterion_dense(d_pos, d_neg)
             loss = 0.5 * (loss + loss_dense)
+            if args.cutmix:
+                loss = loss + loss_cutmix ## TODO: move this into bracelet
 
         # acc1/acc5 are (K+1)-way contrast classifier accuracy
         # measure accuracy and record loss

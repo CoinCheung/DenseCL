@@ -92,4 +92,13 @@ r101:
 83.57/61.02/68.20  
 83.52/60.89/67.32
 
+r50-regionCL:
+80.80/56.91/62.50
+80.73/56.88/62.87
+加上detach再来
+80.60/56.28/61.73
+80.80/56.74/61.96
+
+去掉cutmix能恢复不
+
 ***Note:*** These results are means of 5 trials. Variation on Pascal VOC is large: the std of AP50, AP, AP75 is expected to be 0.2, 0.2, 0.4 in most cases. We recommend to run 5 trials and compute means.

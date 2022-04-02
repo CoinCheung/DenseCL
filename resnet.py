@@ -203,7 +203,7 @@ class ResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def _forward_impl(self, x):
+    def forward_backbone(self, x):
         # See note [TorchScript super()]
         x = self.conv1(x)
         x = self.bn1(x)
@@ -214,7 +214,10 @@ class ResNet(nn.Module):
         x = self.layer2(x)
         x = self.layer3(x)
         feat = self.layer4(x)
+        return feat
 
+    def _forward_impl(self, x):
+        feat = self.forward_backbone(x)
         x = self.avgpool(feat)
         x = torch.flatten(x, 1)
         logits = self.fc(x)
@@ -225,6 +228,18 @@ class ResNet(nn.Module):
 
     def forward(self, x):
         return self._forward_impl(x)
+
+    def forward_cutmix(self, mix_res):
+        ims_mix, perm, h, w, hst, wst = mix_res
+        feat = self.forward_backbone(ims_mix)
+        bs, C, H, W = feat.size()
+        mask = torch.zeros(bs, C, H, W).to(feat.device).detach()
+        mask[:, :, hst:hst+h, wst:wst+w] = 1
+        p = (feat * mask).mean(dim=(2, 3))
+        c = (feat * (1-mask)).mean(dim=(2, 3))
+        p = self.fc(p)
+        c = self.fc(c)
+        return p, c
 
 
 def _resnet(arch, block, layers, pretrained, progress, **kwargs):
