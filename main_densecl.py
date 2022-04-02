@@ -23,8 +23,11 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
 
-import densecl.loader
-from densecl.builder import DenseCL
+import moco.loader
+from moco.builder import DenseCL
+from moco.builder_cutmix import DenseCLCutmix
+from cross_entropy import CrossEntropyLoss
+from rince import RINCE
 
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
@@ -170,9 +173,10 @@ def main_worker(gpu, ngpus_per_node, args):
     # create model
     print("=> creating model '{}'".format(args.arch))
     base_model = model_dict[args.arch]
-    model = densecl.builder.DenseCL(base_model,
-        args.moco_dim, args.moco_k, args.moco_m,
-        args.moco_t, args.mlp, args.cutmix)
+    Wrapper = moco.builder.DenseCL
+    if args.cutmix: Wrapper = moco.builder_cutmix.DenseCLCutmix
+    model = Wrapper(base_model,
+        args.moco_dim, args.moco_k, args.moco_m, args.moco_t, args.mlp)
     print(model)
 
     if args.distributed:
@@ -317,13 +321,14 @@ def train(train_loader, model, optimizer, epoch, args):
 
         # compute output
         with amp.autocast(enabled=args.use_mixed_precision):
-            loss_cls, loss_dense, extra = model(
+            #  output, target, output_dense, target_dense = model(
+            [l_pos, l_neg], [d_pos, d_neg], loss_cutmix = model(
                     im_q=images[0], im_k=images[1])
-
-            loss = 0.5 * (loss_cls + loss_dense)
+            loss = criterion(l_pos, l_neg)
+            loss_dense = criterion_dense(d_pos, d_neg)
+            loss = 0.5 * (loss + loss_dense)
             if args.cutmix:
-                loss_cutmix = extra['loss_cutmix']
-                loss = loss + loss_cutmix
+                loss = loss + loss_cutmix ## TODO: move this into bracelet
 
         # acc1/acc5 are (K+1)-way contrast classifier accuracy
         # measure accuracy and record loss
