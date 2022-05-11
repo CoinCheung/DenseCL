@@ -230,13 +230,15 @@ class ResNet(nn.Module):
         return self._forward_impl(x)
 
     def forward_cutmix(self, mix_res):
-        ims_mix, perm, h, w, hst, wst = mix_res
+        ims_mix, perm, perm_unshuf, h, w, hst, wst = mix_res
         feat = self.forward_backbone(ims_mix)
         bs, C, H, W = feat.size()
-        mask = torch.zeros(bs, C, H, W).to(feat.device).detach()
+        num_p = h * w
+        num_c = H * W - h * w
+        mask = torch.zeros(1, 1, H, W).to(feat.device).detach()
         mask[:, :, hst:hst+h, wst:wst+w] = 1
-        p = (feat * mask).mean(dim=(2, 3))
-        c = (feat * (1-mask)).mean(dim=(2, 3))
+        p = (feat * mask).sum(dim=(2, 3)).div(num_p)
+        c = (feat * (1-mask)).sum(dim=(2, 3)).div(num_c)
         p = self.fc(p)
         c = self.fc(c)
         return p, c

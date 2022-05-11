@@ -137,4 +137,3 @@ dist_train_2.sh
 detection/output/
 *pkl
 pretrained/
-detection/output_denseCL_200ep.pkl

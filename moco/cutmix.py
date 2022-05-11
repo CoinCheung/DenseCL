@@ -5,9 +5,10 @@ import torch.nn as nn
 
 
 
-class CutMixer(object):
+class CutMixer(nn.Module):
 
     def __init__(self, divisor=32, lower=3, upper=6, T=0.07):
+        super(CutMixer, self).__init__()
         '''
         cropsize is within [lower*32, upper*32)
         '''
@@ -29,13 +30,15 @@ class CutMixer(object):
         h_, w_ = h * self.divisor, w * self.divisor
 
         perm = torch.randperm(bs).cuda()
+        perm_unshuf = perm.argsort()
         ims_mix = ims.clone()
         ims_mix[:, :, hst_:hst_+h_, wst_:wst_+w_] = ims[perm, :, hst_:hst_+h_, wst_:wst_+w_]
-        return ims_mix.detach(), perm, h, w, hst, wst
+        return ims_mix.detach(), perm, perm_unshuf, h, w, hst, wst
 
-    def forward_mix(self, model, mix_res, q, k, queue):
-        ims_mix, perm, h, w, hst, wst = mix_res
-        perm_unshuf = perm.argsort()
+    def forward_mix(self, model, ims, q, k, queue):
+        mix_res = self.mix_img(ims)
+        ims_mix, perm, perm_unshuf, h, w, hst, wst = mix_res
+
         p, c = model.forward_cutmix(mix_res)
         p = nn.functional.normalize(p, dim=1)
         c = nn.functional.normalize(c, dim=1)

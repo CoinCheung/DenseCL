@@ -5,6 +5,7 @@ import torch.nn as nn
 from .cutmix import CutMixer
 
 
+
 class DenseCL(nn.Module):
     """
     Build a DenseCL model with: a query encoder, a key encoder, and a queue
@@ -18,6 +19,8 @@ class DenseCL(nn.Module):
         T: softmax temperature (default: 0.07)
         """
         super(DenseCL, self).__init__()
+
+        self.cutmixer = CutMixer(T=T) if cutmix else None
 
         self.K = K
         self.m = m
@@ -205,14 +208,8 @@ class DenseCL(nn.Module):
         # dequeue and enqueue
         self._dequeue_and_enqueue(k, dense_k)
 
-        return [l_pos, l_neg], [d_pos, d_neg], [q, k]
-        #  return logits, labels, logits_dense, labels_dense
+        return loss_cls, loss_dense, extra
 
-
-    def forward_cuxmit(self, mix_res, q, k):
-        ims_mix, perm, h, w, hst, wst = mix_res
-        perm_unshuf = perm.argsort()
-        feat = self.encoder_q.forward(im_q)  # queries: NxC
 
 
 # utils
