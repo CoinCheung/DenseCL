@@ -99,6 +99,44 @@ r50-regionCL:
 80.60/56.28/61.73
 80.80/56.74/61.96
 
-去掉cutmix能恢复不
+修复cutmix的方法:
+79.27/54.85/60.27
+81.19/56.98/62.58
+
+修复mean: (80.24/91.06)
+80.86/57.05/62.68
+81.35/57.50/63.29
+
+去掉cutmix能恢复不: (82.78/92.06)
+没恢复，更低了
+
+合并成一个builder，然后去掉cutmix和warmup(82.96/92.08):
+    82.75/58.56/64.95
+    82.74/58.54/65.0
+    已恢复
+
+regionCL, 三个loss直接相加: (81.42/91.74):
+    83.42/58.76/64.99
+    83.29/58.92/65.51
+
+regionCL, cutmix加到denseCL的loss上面: (80.11/90.94)
+    83.19/58.87/66.06
+    83.38/58.90/66.52
+
+regionCL, 三个loss平均: -- discard，相当于调了学习率
+
+加上warmup: (80.44/91.15)
+    83.24/58.84/65.98
+    83.40/58.60/65.16
+
+regionCL,r101:
+
+refine:
+    * 加上pretrain的链接
+    * 把训练的命令写成脚本
+    * done -- 删掉builder_cutmix.py
+    * 删掉无效代码
+    * readme再写写
+
 
 ***Note:*** These results are means of 5 trials. Variation on Pascal VOC is large: the std of AP50, AP, AP75 is expected to be 0.2, 0.2, 0.4 in most cases. We recommend to run 5 trials and compute means.

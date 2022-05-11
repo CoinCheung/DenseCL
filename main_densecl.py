@@ -25,9 +25,6 @@ import torchvision.models as models
 
 import moco.loader
 from moco.builder import DenseCL
-from moco.builder_cutmix import DenseCLCutmix
-from cross_entropy import CrossEntropyLoss
-from rince import RINCE
 
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
@@ -173,10 +170,9 @@ def main_worker(gpu, ngpus_per_node, args):
     # create model
     print("=> creating model '{}'".format(args.arch))
     base_model = model_dict[args.arch]
-    Wrapper = moco.builder.DenseCL
-    if args.cutmix: Wrapper = moco.builder_cutmix.DenseCLCutmix
-    model = Wrapper(base_model,
-        args.moco_dim, args.moco_k, args.moco_m, args.moco_t, args.mlp)
+    model = moco.builder.DenseCL(base_model,
+        args.moco_dim, args.moco_k, args.moco_m,
+        args.moco_t, args.mlp, args.cutmix)
     print(model)
 
     if args.distributed:
@@ -206,12 +202,6 @@ def main_worker(gpu, ngpus_per_node, args):
         # AllGather implementation (batch shuffle, queue update, etc.) in
         # this code only supports DistributedDataParallel.
         raise NotImplementedError("Only DistributedDataParallel is supported.")
-
-    # define loss function (criterion) and optimizer
-    criterion = CrossEntropyLoss().cuda(args.gpu)
-    #  criterion = RINCE().cuda(args.gpu)
-    criterion_dense = CrossEntropyLoss().cuda(args.gpu)
-    #  criterion_dense = RINCE().cuda(args.gpu)
 
     optimizer = torch.optim.SGD(model.parameters(), args.lr,
                                 momentum=args.momentum,
@@ -284,7 +274,7 @@ def main_worker(gpu, ngpus_per_node, args):
         adjust_learning_rate(optimizer, epoch, args)
 
         # train for one epoch
-        train(train_loader, model, criterion, criterion_dense, optimizer, epoch, args)
+        train(train_loader, model, optimizer, epoch, args)
 
         n_ckpt_period = 20
         if not args.multiprocessing_distributed or (args.multiprocessing_distributed
@@ -298,7 +288,8 @@ def main_worker(gpu, ngpus_per_node, args):
             }, is_best=False, filename='checkpoint_{:04d}.pth.tar'.format(epoch))
 
 
-def train(train_loader, model, criterion, criterion_dense, optimizer, epoch, args):
+#  def train(train_loader, model, criterion, criterion_dense, optimizer, epoch, args):
+def train(train_loader, model, optimizer, epoch, args):
     batch_time = AverageMeter('Time', ':6.3f')
     data_time = AverageMeter('Data', ':6.3f')
     losses = AverageMeter('Loss', ':.4e')
@@ -326,19 +317,19 @@ def train(train_loader, model, criterion, criterion_dense, optimizer, epoch, arg
 
         # compute output
         with amp.autocast(enabled=args.use_mixed_precision):
-            #  output, target, output_dense, target_dense = model(
-            [l_pos, l_neg], [d_pos, d_neg], loss_cutmix = model(
+            loss_cls, loss_dense, extra = model(
                     im_q=images[0], im_k=images[1])
-            loss = criterion(l_pos, l_neg)
-            loss_dense = criterion_dense(d_pos, d_neg)
-            loss = 0.5 * (loss + loss_dense)
+
+            loss = 0.5 * (loss_cls + loss_dense)
             if args.cutmix:
-                loss = loss + loss_cutmix ## TODO: move this into bracelet
+                loss_cutmix = extra['loss_cutmix']
+                loss = loss + loss_cutmix
 
         # acc1/acc5 are (K+1)-way contrast classifier accuracy
         # measure accuracy and record loss
         with torch.no_grad():
-            acc1, acc5 = accuracy(torch.cat([l_pos, l_neg], dim=1), topk=(1, 5))
+            logits, labels = extra['logits'], extra['labels']
+            acc1, acc5 = accuracy(logits, labels, topk=(1, 5))
             losses.update(loss.item(), images[0].size(0))
             top1.update(acc1[0], images[0].size(0))
             top5.update(acc5[0], images[0].size(0))
@@ -410,6 +401,7 @@ def adjust_learning_rate(optimizer, epoch, args):
     """Decay the learning rate based on schedule"""
     lr = args.lr
     if args.cos:  # cosine lr schedule
+        #  lr *= 0.5 * (1. + math.cos(math.pi * epoch / args.epochs))
         if epoch < args.warmup_epochs:
             ratio = (epoch + 1) / args.warmup_epochs
         else:
@@ -424,7 +416,7 @@ def adjust_learning_rate(optimizer, epoch, args):
         param_group['lr'] = lr
 
 
-def accuracy(output, topk=(1,)):
+def accuracy(output, target, topk=(1,)):
     """Computes the accuracy over the k top predictions for the specified values of k"""
     with torch.no_grad():
         maxk = max(topk)
@@ -432,7 +424,7 @@ def accuracy(output, topk=(1,)):
 
         _, pred = output.topk(maxk, 1, True, True)
         pred = pred.t()
-        correct = pred.eq(0)
+        correct = pred.eq(target.view(1, -1).expand_as(pred))
 
         res = []
         for k in topk:

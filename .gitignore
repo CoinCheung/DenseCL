@@ -136,4 +136,4 @@ dist_train_2.sh
 *tar
 detection/output/
 *pkl
-
+pretrained/

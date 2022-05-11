@@ -2,7 +2,7 @@
 
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/11435359/71603927-0ca98d00-2b14-11ea-9fd8-10d984a2de45.png" width="300">
+  <img src="./denseCL.png" width="600">
 </p>
 
 This is an unofficial PyTorch implementation of the [DenseCL paper](https://arxiv.org/abs/2011.09157), with the help and suggestions from @WXinlong and @DerrickWang005.
