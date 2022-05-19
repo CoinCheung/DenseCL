@@ -25,7 +25,7 @@ diff main_lincls.py <(curl https://raw.githubusercontent.com/pytorch/examples/ma
 
 This implementation only supports **multi-gpu**, **DistributedDataParallel** training, which is faster and simpler; single-gpu or DataParallel training is not supported.
 
-This implementation only supports **resnet-50** and **resnet-101**, since we need to modify computing graph architecture and I only modified resnet-50/101.
+This implementation only supports **ResNet50/ResNet101**, since we need to modify computing graph architecture and I only modified ResNet50/ResNet101.
 
 To do unsupervised pre-training and linear-evaluation of a ResNet50/ResNet101 model on ImageNet in an 8-gpu machine, please refer to [dist_train.sh](./dist_train.sh) for relevant starting script.
 
@@ -44,6 +44,7 @@ Linear classification results on ImageNet using this repo with 8 GPUs :
 <th valign="bottom">MoCo v1<br/>top-1 acc.</th>
 <th valign="bottom">MoCo v2<br/>top-1 acc.</th>
 <th valign="bottom">DenseCL<br/>top-1 acc.</th>
+<th valign="bottom">RegionCL-D<br/>top-1 acc.</th>
 <!-- TABLE BODY -->
 <tr><td align="left">ResNet-50</td>
 <td align="center">200</td>
@@ -51,6 +52,7 @@ Linear classification results on ImageNet using this repo with 8 GPUs :
 <td align="center">60.8&plusmn;0.2</td>
 <td align="center">67.5&plusmn;0.1</td>
 <td align="center"> 63.8 &plusmn;0.1</td>
+<td align="center"> -- &plusmn;0.1</td>
 </tr>
 <tr><td align="left">ResNet-101</td>
 <td align="center">200</td>
@@ -58,6 +60,7 @@ Linear classification results on ImageNet using this repo with 8 GPUs :
 <td align="center">--</td>
 <td align="center">--</td>
 <td align="center"> 65.4 &plusmn;0.1</td>
+<td align="center"> -- &plusmn;0.1</td>
 </tr>
 </tbody></table>
 
@@ -106,7 +109,7 @@ Our pre-trained denseCL/RegionCL-D models can be downloaded as following:
 <td align="center">&#x2713</td>
 <td align="center">  </td>
 <td align="center"><a href="https://github.com/CoinCheung/DenseCL/releases/download/v0.0.1/regioncl_r50_checkpoint_0199.pth.tar">download</a></td>
-<td align="center"><tt>7cfc894c</tt></td>
+<td align="center"><tt>8afad30e</tt></td>
 </tr>
 <tr><td align="left"><a href="https://arxiv.org/abs/2111.12309">RegionCL-D R101</a></td>
 <td align="center">200</td>
@@ -115,7 +118,7 @@ Our pre-trained denseCL/RegionCL-D models can be downloaded as following:
 <td align="center">&#x2713</td>
 <td align="center"></td>
 <td align="center"><a href="https://github.com/CoinCheung/DenseCL/releases/download/v0.0.1/regioncl_r101_checkpoint_0199.pth.tar">download</a></td>
-<td align="center"><tt>006675e5</tt></td>
+<td align="center"><tt>a1489ad4</tt></td>
 </tr>
 </tbody></table>
 
