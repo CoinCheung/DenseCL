@@ -96,6 +96,9 @@ Below are the results on Pascal VOC 2007 test, fine-tuned on 2007+2012 trainval 
 </tr>
 </tbody></table>
 
+***Note:*** These results are means of 5 trials. Variation on Pascal VOC is large: the std of AP50, AP, AP75 is expected to be 0.2, 0.2, 0.4 in most cases. We recommend to run 5 trials and compute means.
+
+
 denseCL, r50:  
     82.64/58.32/64.60  
     82.64/58.41/64.89
@@ -113,4 +116,3 @@ regionCL-D, r101:
     84.39/61.70/68.21
 
 
-***Note:*** These results are means of 5 trials. Variation on Pascal VOC is large: the std of AP50, AP, AP75 is expected to be 0.2, 0.2, 0.4 in most cases. We recommend to run 5 trials and compute means.
