@@ -23,14 +23,14 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
 
-import moco.loader
-from moco.builder import DenseCL
+import densecl.loader
+from densecl.builder import DenseCL
 
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
     and callable(models.__dict__[name]))
 
-from resnet import resnet50, resnet101
+from densecl.resnet import resnet50, resnet101
 model_names = ['resnet50', 'resnet101']
 model_dict = {'resnet50': resnet50, 'resnet101': resnet101}
 
@@ -170,7 +170,7 @@ def main_worker(gpu, ngpus_per_node, args):
     # create model
     print("=> creating model '{}'".format(args.arch))
     base_model = model_dict[args.arch]
-    model = moco.builder.DenseCL(base_model,
+    model = densecl.builder.DenseCL(base_model,
         args.moco_dim, args.moco_k, args.moco_m,
         args.moco_t, args.mlp, args.cutmix)
     print(model)
@@ -239,7 +239,7 @@ def main_worker(gpu, ngpus_per_node, args):
                 transforms.ColorJitter(0.4, 0.4, 0.4, 0.1)  # not strengthened
             ], p=0.8),
             transforms.RandomGrayscale(p=0.2),
-            transforms.RandomApply([moco.loader.GaussianBlur([.1, 2.])], p=0.5),
+            transforms.RandomApply([densecl.loader.GaussianBlur([.1, 2.])], p=0.5),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             normalize
@@ -257,7 +257,7 @@ def main_worker(gpu, ngpus_per_node, args):
 
     train_dataset = datasets.ImageFolder(
         traindir,
-        moco.loader.TwoCropsTransform(transforms.Compose(augmentation)))
+        densecl.loader.TwoCropsTransform(transforms.Compose(augmentation)))
 
     if args.distributed:
         train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
