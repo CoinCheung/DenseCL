@@ -102,7 +102,7 @@ Our pre-trained denseCL/RegionCL-D models can be downloaded as following:
 </tr>
 </tbody></table>
 
-Here **imagenet** is imagenet-1k dataset. We freeze pretrained weights and only fine tune the last classifier layer.
+Here **IM** is imagenet-1k dataset. We freeze pretrained weights and only fine tune the last classifier layer.
 
 Please be aware that though DenseCL cannot match mocov2 in the filed of classification, it is superior to mocov2 in terms of object detection. More results of detection can be found [here](./detection).
 
