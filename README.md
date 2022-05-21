@@ -45,7 +45,7 @@ Our pre-trained denseCL/RegionCL-D models can be downloaded as following:
 <th valign="bottom">mlp</th>
 <th valign="bottom">aug+</th>
 <th valign="bottom">cos</th>
-<th valign="bottom">imagenet<br/>top1</th>
+<th valign="bottom">IM<br/>top1</th>
 <th valign="bottom">VOC<br/>AP50</th>
 <th valign="bottom">model</th>
 <th valign="bottom">md5</th>
