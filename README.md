@@ -52,7 +52,7 @@ Linear classification results on ImageNet using this repo with 8 GPUs :
 <td align="center">60.8&plusmn;0.2</td>
 <td align="center">67.5&plusmn;0.1</td>
 <td align="center"> 63.8 &plusmn;0.1</td>
-<td align="center"> -- &plusmn;0.1</td>
+<td align="center"> 67.5 &plusmn;0.1</td>
 </tr>
 <tr><td align="left">ResNet-101</td>
 <td align="center">200</td>
@@ -60,7 +60,7 @@ Linear classification results on ImageNet using this repo with 8 GPUs :
 <td align="center">--</td>
 <td align="center">--</td>
 <td align="center"> 65.4 &plusmn;0.1</td>
-<td align="center"> -- &plusmn;0.1</td>
+<td align="center"> 67.4 &plusmn;0.1</td>
 </tr>
 </tbody></table>
 
@@ -107,7 +107,7 @@ Our pre-trained denseCL/RegionCL-D models can be downloaded as following:
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
-<td align="center">  </td>
+<td align="center">67.5</td>
 <td align="center"><a href="https://github.com/CoinCheung/DenseCL/releases/download/v0.0.1/regioncl_r50_checkpoint_0199.pth.tar">download</a></td>
 <td align="center"><tt>8afad30e</tt></td>
 </tr>
@@ -116,7 +116,7 @@ Our pre-trained denseCL/RegionCL-D models can be downloaded as following:
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
-<td align="center"></td>
+<td align="center">67.48</td>
 <td align="center"><a href="https://github.com/CoinCheung/DenseCL/releases/download/v0.0.1/regioncl_r101_checkpoint_0199.pth.tar">download</a></td>
 <td align="center"><tt>a1489ad4</tt></td>
 </tr>
