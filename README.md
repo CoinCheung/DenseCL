@@ -55,8 +55,8 @@ Our pre-trained denseCL/RegionCL-D models can be downloaded as following:
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
-<td align="center">82.4</td>
 <td align="center">67.7</td>
+<td align="center">82.4</td>
 <td align="center"><a href="https://dl.fbaipublicfiles.com/moco/moco_checkpoints/moco_v2_200ep/moco_v2_200ep_pretrain.pth.tar">download</a></td>
 <td align="center"><tt>59fd9945</tt></td>
 </tr>
