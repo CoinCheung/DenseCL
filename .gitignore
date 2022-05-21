@@ -136,4 +136,5 @@ dist_train_2.sh
 *tar
 detection/output/
 *pkl
-
+pretrained/
+detection/output_denseCL_200ep.pkl

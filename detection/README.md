@@ -6,15 +6,15 @@ The `train_net.py` script reproduces the object detection experiments on Pascal 
 ### Instruction
 
 1. Install [detectron2](https://github.com/facebookresearch/detectron2/blob/master/INSTALL.md).
-```
+    ```
     $ git clone https://github.com/facebookresearch/detectron2.git
     $ cd detectron2
     $ git checkout 3e71a2711bec
     $ python -m pip install -e .
-```
-This requires cuda10.2 to work.
+    ```
+    This requires cuda10.2 to work.
 
-2. Convert a pre-trained MoCo/DenseCL model to detectron2's format:
+2. Convert a pre-trained model to detectron2's format:
    ```
    python3 convert-pretrain-to-detectron2.py input.pth.tar output.pkl
    ```
@@ -30,13 +30,15 @@ This requires cuda10.2 to work.
 
 4. Run training:
    ```
-   # r50 densecl
+   # r50 
    python train_net.py --config-file configs/pascal_voc_R_50_C4_24k_moco.yaml \
 	--num-gpus 8 MODEL.WEIGHTS ./output.pkl
-   # r101 densecl
+   # r101 
    python train_net.py --config-file configs/pascal_voc_R_101_C4_24k_moco.yaml \
 	--num-gpus 8 MODEL.WEIGHTS ./output.pkl
    ```
+    
+    Or you can see [dist_train.sh](./dist_train.sh) for the training scripts.
 
 ### Results
 
@@ -82,14 +84,35 @@ Below are the results on Pascal VOC 2007 test, fine-tuned on 2007+2012 trainval 
 <td align="center">61.02</td>
 <td align="center">68.20</td>
 </tr>
+<tr><td align="left">ImageNet-1M, R50, RegionCL-D, 200ep</td>
+<td align="center">83.32</td>
+<td align="center">58.72</td>
+<td align="center">65.57</td>
+</tr>
+<tr><td align="left">ImageNet-1M, R101, RegionCL-D, 200ep</td>
+<td align="center">84.30</td>
+<td align="center">61.59</td>
+<td align="center">68.17</td>
+</tr>
 </tbody></table>
 
-r50:  
-82.64/58.32/64.60  
-82.64/58.41/64.89
-
-r101:  
-83.57/61.02/68.20  
-83.52/60.89/67.32
-
 ***Note:*** These results are means of 5 trials. Variation on Pascal VOC is large: the std of AP50, AP, AP75 is expected to be 0.2, 0.2, 0.4 in most cases. We recommend to run 5 trials and compute means.
+
+
+denseCL, r50:  
+    82.64/58.32/64.60  
+    82.64/58.41/64.89
+
+denseCL, r101:  
+    83.57/61.02/68.20  
+    83.52/60.89/67.32
+
+regionCL-D, r50:  
+    83.24/58.84/65.98  
+    83.40/58.60/65.16
+
+regionCL-D, r101:  
+    84.22/61.48/68.14  
+    84.39/61.70/68.21
+
+
