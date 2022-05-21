@@ -45,8 +45,8 @@ Our pre-trained denseCL/RegionCL-D models can be downloaded as following:
 <th valign="bottom">mlp</th>
 <th valign="bottom">aug+</th>
 <th valign="bottom">cos</th>
-<th valign="bottom">linear-prob. top1</th>
-<th valign="bottom">VOC AP50</th>
+<th valign="bottom">linear<br/>top1</th>
+<th valign="bottom">VOC<br/>AP50</th>
 <th valign="bottom">model</th>
 <th valign="bottom">md5</th>
 <!-- TABLE BODY -->
@@ -101,6 +101,8 @@ Our pre-trained denseCL/RegionCL-D models can be downloaded as following:
 <td align="center"><tt>a1489ad4</tt></td>
 </tr>
 </tbody></table>
+
+Here **linear** is done on imagenet-1k dataset. We freeze pretrained weights and only fine tune the last classifier layer.
 
 Please be aware that though DenseCL cannot match mocov2 in the filed of classification, it is superior to mocov2 in terms of object detection. More results of detection can be found [here](./detection).
 
