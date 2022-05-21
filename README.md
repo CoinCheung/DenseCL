@@ -50,7 +50,7 @@ Our pre-trained denseCL/RegionCL-D models can be downloaded as following:
 <th valign="bottom">model</th>
 <th valign="bottom">md5</th>
 <!-- TABLE BODY -->
-<tr><td align="left"><a href="https://arxiv.org/abs/2003.04297">MoCo v2</a></td>
+<tr><td align="left"><a href="https://arxiv.org/abs/2003.04297">MoCov2 R50</a></td>
 <td align="center">200</td>
 <td align="center">&#x2713</td>
 <td align="center">&#x2713</td>
