@@ -122,6 +122,6 @@ regioncl, r50:
     Acc@1 67.518 Acc@5 88.256  
     Acc@1 67.534 Acc@5 88.212  
 regioncl, r101:  
-    Acc@1 67.504 Acc@5 88.212
+    Acc@1 67.504 Acc@5 88.212  
     Acc@1 67.470 Acc@5 88.104
     
