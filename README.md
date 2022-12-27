@@ -67,7 +67,7 @@ Our pre-trained denseCL/RegionCL-D models can be downloaded as following:
 <td align="center">&#x2713</td>
 <td align="center">63.8</td>
 <td align="center">82.7</td>
-<td align="center"><a href="https://github.com/CoinCheung/denseCL/releases/download/v0.0.1/r50_checkpoint_0199.pth.tar">download</a></td>
+<td align="center"><a href="https://github.com/CoinCheung/DenseCL/releases/download/v0.0.1/densecl_r50_checkpoint_0199.pth.tar">download</a></td>
 <td align="center"><tt>7cfc894c</tt></td>
 </tr>
 <tr><td align="left"><a href="https://arxiv.org/abs/2011.09157">DenseCL R101</a></td>
@@ -77,7 +77,7 @@ Our pre-trained denseCL/RegionCL-D models can be downloaded as following:
 <td align="center">&#x2713</td>
 <td align="center">65.4</td>
 <td align="center">83.5</td>
-<td align="center"><a href="https://github.com/CoinCheung/denseCL/releases/download/v0.0.1/r101_checkpoint_0199.pth.tar">download</a></td>
+<td align="center"><a href="https://github.com/CoinCheung/DenseCL/releases/download/v0.0.1/densecl_r101_checkpoint_0199.pth.tar">download</a></td>
 <td align="center"><tt>006675e5</tt></td>
 </tr>
 <tr><td align="left"><a href="https://arxiv.org/abs/2111.12309">RegionCL-D R50</a></td>
